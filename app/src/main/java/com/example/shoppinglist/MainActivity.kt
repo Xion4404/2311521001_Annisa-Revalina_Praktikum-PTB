@@ -15,19 +15,23 @@ import com.example.shoppinglist.components.SearchInput
 import com.example.shoppinglist.components.ShoppingList
 import com.example.shoppinglist.components.Title
 import com.example.shoppinglist.ui.theme.ShoppingListTheme
-
+import com.example.shoppinglist.ui.theme.Shapes
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ShoppingListTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    ShoppingListApp()
+            MaterialTheme(
+                colorScheme = lightColorScheme(),
+                shapes = Shapes,
+                content = {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        ShoppingListApp()
+                    }
                 }
-            }
+            )
         }
     }
 }

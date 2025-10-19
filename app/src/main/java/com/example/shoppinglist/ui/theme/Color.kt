@@ -22,7 +22,7 @@ val RedPrimaryContainer = Color(0xFFFFDAD6)
 val RedOnPrimaryContainer = Color(0xFF410E0B)
 
 
-// Warna untuk dark mode
+
 val RedDarkBackground = Color(0xFF121212)
 val RedDarkOnBackground = Color(0xFFE6E1E5)
 val RedDarkPrimaryContainer = Color(0xFF93000A)

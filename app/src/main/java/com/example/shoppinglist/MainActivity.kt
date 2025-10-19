@@ -3,6 +3,7 @@ package com.example.shoppinglist
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -54,7 +55,6 @@ fun MainScreen() {
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
     var showSettings by rememberSaveable { mutableStateOf(false) }
 
-    // Drawer state dan coroutine scope untuk buka/tutup drawer
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -62,7 +62,6 @@ fun MainScreen() {
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-                // Header sederhana
                 Text(
                     text = "Menu",
                     style = MaterialTheme.typography.titleLarge,
@@ -75,7 +74,6 @@ fun MainScreen() {
                     label = { Text("Settings") },
                     selected = showSettings,
                     onClick = {
-                        // tutup drawer lalu tampilkan Settings
                         scope.launch { drawerState.close() }
                         showSettings = true
                         selectedIndex = -1
@@ -83,8 +81,6 @@ fun MainScreen() {
                     modifier = Modifier.padding(vertical = 8.dp),
                     colors = NavigationDrawerItemDefaults.colors()
                 )
-
-                // Tambahkan item lainnya jika diperlukan
             }
         }
     ) {
@@ -98,7 +94,6 @@ fun MainScreen() {
                         )
                     },
                     navigationIcon = {
-                        // Ikon titik tiga di kiri atas untuk membuka drawer
                         IconButton(onClick = {
                             scope.launch { drawerState.open() }
                         }) {
@@ -134,11 +129,20 @@ fun MainScreen() {
             }
         ) { innerPadding ->
             Box(modifier = Modifier.padding(innerPadding)) {
-                when {
-                    showSettings -> Settings()
-                    selectedIndex == 0 -> ShoppingListScreen()
-                    selectedIndex == 1 -> ProfileS()
-                    else -> ShoppingListScreen()
+                Crossfade(
+                    targetState = when {
+                        showSettings -> "settings"
+                        selectedIndex == 0 -> "list"
+                        selectedIndex == 1 -> "profile"
+                        else -> "list"
+                    },
+                    label = "screenTransition"
+                ) { screen ->
+                    when (screen) {
+                        "settings" -> Settings()
+                        "list" -> ShoppingListScreen()
+                        "profile" -> ProfileS()
+                    }
                 }
             }
         }
